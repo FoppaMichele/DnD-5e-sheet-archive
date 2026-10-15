@@ -8,7 +8,7 @@ interface CharacterContextType {
   homebrewCompendium: HomebrewItem[];
   setActiveCharacterId: (id: string) => void;
   updateActiveCharacter: (updater: (prev: Character) => Character) => void;
-  createCharacter: (name: string, className: string, race: string) => void;
+  createCharacter: (name: string, className: string, race: string, background: string) => void;
   duplicateCharacter: (id: string) => void;
   deleteCharacter: (id: string) => void;
   addHomebrewItem: (item: HomebrewItem) => void;
@@ -28,18 +28,12 @@ const CharacterContext = createContext<CharacterContextType | undefined>(undefin
 
 export const CharacterProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [characters, setCharacters] = useState<Character[]>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) return JSON.parse(saved);
-    } catch (e) { console.error(e); }
+    try { const saved = localStorage.getItem(STORAGE_KEY); if (saved) return JSON.parse(saved); } catch (e) { console.error(e); }
     return [createDefaultCharacter()];
   });
 
   const [homebrewCompendium, setHomebrewCompendium] = useState<HomebrewItem[]>(() => {
-    try {
-      const saved = localStorage.getItem(HOMEBREW_KEY);
-      if (saved) return JSON.parse(saved);
-    } catch (e) { console.error(e); }
+    try { const saved = localStorage.getItem(HOMEBREW_KEY); if (saved) return JSON.parse(saved); } catch (e) { console.error(e); }
     return [];
   });
 
@@ -55,10 +49,11 @@ export const CharacterProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     setCharacters((prev) => prev.map((char) => (char.id === activeCharacter.id ? updater(char) : char)));
   };
 
-  const createCharacter = (name: string, className: string, race: string) => {
+  const createCharacter = (name: string, className: string, race: string, background: string) => {
     const newChar = createDefaultCharacter(name);
     newChar.className = className;
     newChar.race = race;
+    newChar.background = background;
     setCharacters((prev) => [...prev, newChar]);
     setActiveId(newChar.id);
   };
@@ -83,11 +78,7 @@ export const CharacterProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     const dataStr = JSON.stringify({ characters, homebrewCompendium }, null, 2);
     const blob = new Blob([dataStr], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'dnd5e-backup.json';
-    link.click();
-    URL.revokeObjectURL(url);
+    const link = document.createElement('a'); link.href = url; link.download = 'dnd5e-backup.json'; link.click(); URL.revokeObjectURL(url);
   };
 
   const importDatabaseJson = (file: File) => {
@@ -96,12 +87,8 @@ export const CharacterProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       try {
         const parsed = JSON.parse(event.target?.result as string);
         if (parsed.characters && Array.isArray(parsed.characters)) {
-          setCharacters(parsed.characters);
-          setHomebrewCompendium(parsed.homebrewCompendium || []);
-          setActiveId(parsed.characters[0].id);
-        } else if (Array.isArray(parsed)) {
-          setCharacters(parsed);
-          setActiveId(parsed[0].id);
+          setCharacters(parsed.characters); setHomebrewCompendium(parsed.homebrewCompendium || []); setActiveId(parsed.characters[0].id);
+        } else if (Array.isArray(parsed)) { setCharacters(parsed); setActiveId(parsed[0].id);
         } else { alert('Invalid backup file format.'); }
       } catch { alert('Error parsing file.'); }
     };
@@ -117,38 +104,13 @@ export const CharacterProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
   const rollCheck = (label: string, modifier: number, damageFormula?: string) => {
     const d20Raw = Math.floor(Math.random() * 20) + 1;
-    setRollLogs((prev) => [
-      { id: crypto.randomUUID(), timestamp: new Date().toLocaleTimeString(), characterName: activeCharacter.name, label, d20Raw, modifier, total: d20Raw + modifier, damageResult: damageFormula },
-      ...prev.slice(0, 19),
-    ]);
+    setRollLogs((prev) => [{ id: crypto.randomUUID(), timestamp: new Date().toLocaleTimeString(), characterName: activeCharacter.name, label, d20Raw, modifier, total: d20Raw + modifier, damageResult: damageFormula }, ...prev.slice(0, 19)]);
   };
 
   return (
-    <CharacterContext.Provider value={{
-      characters,
-      activeCharacter,
-      homebrewCompendium,
-      setActiveCharacterId: setActiveId,
-      updateActiveCharacter,
-      createCharacter,
-      duplicateCharacter,
-      deleteCharacter,
-      addHomebrewItem,
-      deleteHomebrewItem,
-      exportDatabaseJson,
-      importDatabaseJson,
-      saveCharacterPdf,
-      rollLogs,
-      rollCheck,
-      clearRolls: () => setRollLogs([]),
-    }}>
+    <CharacterContext.Provider value={{ characters, activeCharacter, homebrewCompendium, setActiveCharacterId: setActiveId, updateActiveCharacter, createCharacter, duplicateCharacter, deleteCharacter, addHomebrewItem, deleteHomebrewItem, exportDatabaseJson, importDatabaseJson, saveCharacterPdf, rollLogs, rollCheck, clearRolls: () => setRollLogs([]) }}>
       {children}
     </CharacterContext.Provider>
   );
 };
-
-export const useCharacter = () => {
-  const context = useContext(CharacterContext);
-  if (!context) throw new Error('useCharacter must be used within a CharacterProvider');
-  return context;
-};
+export const useCharacter = () => { const context = useContext(CharacterContext); if (!context) throw new Error('useCharacter error'); return context; };

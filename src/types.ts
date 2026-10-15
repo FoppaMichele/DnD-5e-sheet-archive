@@ -11,8 +11,8 @@ export interface JournalEntry { id: string; date: string; title: string; locatio
 export interface HomebrewItem {
   id: string;
   name: string;
-  type: 'Weapon' | 'Armor' | 'Wondrous Item' | 'Potion' | 'Ring' | 'Scroll';
-  rarity: 'Common' | 'Uncommon' | 'Rare' | 'Very Rare' | 'Legendary' | 'Artifact';
+  type: 'Weapon' | 'Armor' | 'Wondrous Item' | 'Potion' | 'Ring' | 'Scroll' | 'Class' | 'Species' | 'Background';
+  rarity: 'Common' | 'Uncommon' | 'Rare' | 'Very Rare' | 'Legendary' | 'Artifact' | 'Custom';
   attunement: boolean;
   weight: number;
   mechanics: string;
