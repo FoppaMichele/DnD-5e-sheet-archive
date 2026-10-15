@@ -7,10 +7,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/assets/index-gysKsncA.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-DoMkZfy3.css">
+    <script>
+      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    </script>
+    <script type="module" crossorigin src="/assets/index-B9FAsoYt.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-Dzd41v7J.css">
   </head>
-  <body class="bg-[#f5f4f0] text-stone-900 antialiased selection:bg-stone-900 selection:text-white">
+  <body class="bg-[#f5f4f0] dark:bg-stone-950 text-stone-900 dark:text-stone-300 antialiased selection:bg-stone-900 selection:text-white dark:selection:bg-stone-100 dark:selection:text-stone-900 transition-colors duration-300">
     <div id="root"></div>
   </body>
 </html>
