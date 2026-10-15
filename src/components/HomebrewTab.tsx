@@ -5,7 +5,6 @@ import { Beaker, Plus, Sword, Trash2, ArrowRight } from 'lucide-react';
 
 export const HomebrewTab: React.FC = () => {
   const { homebrewCompendium, addHomebrewItem, deleteHomebrewItem, updateActiveCharacter } = useCharacter();
-
   const [name, setName] = useState('');
   const [type, setType] = useState<HomebrewItem['type']>('Wondrous Item');
   const [rarity, setRarity] = useState<HomebrewItem['rarity']>('Uncommon');
@@ -22,11 +21,11 @@ export const HomebrewTab: React.FC = () => {
   };
 
   const injectToInventory = (item: HomebrewItem) => {
-    updateActiveCharacter(prev => ({
+    updateActiveCharacter((prev) => ({
       ...prev,
-      inventory: [{ id: crypto.randomUUID(), name: item.name, quantity: 1, weight: item.weight, equipped: false, notes: `${item.rarity} ${item.type}. ${item.mechanics}` }, ...prev.inventory]
+      inventory: [{ id: crypto.randomUUID(), name: item.name, quantity: 1, weight: item.weight, equipped: false, notes: item.rarity + ' ' + item.type + '. ' + item.mechanics }, ...prev.inventory],
     }));
-    alert(`${item.name} added to inventory!`);
+    alert(item.name + ' added to active character inventory!');
   };
 
   return (
@@ -60,7 +59,6 @@ export const HomebrewTab: React.FC = () => {
           </button>
         </form>
       </div>
-
       <div className="lg:col-span-8 parchment-card p-4">
         <h3 className="parchment-header"><span className="flex items-center gap-1.5"><Sword className="w-3.5 h-3.5" /> Global Homebrew Compendium</span></h3>
         {homebrewCompendium.length === 0 ? (

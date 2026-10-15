@@ -34,11 +34,11 @@ export const App: React.FC = () => {
               <button
                 key={t.id}
                 onClick={() => setActiveTab(t.id)}
-                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg font-medium text-xs transition ${
+                className={"flex items-center gap-1.5 px-3.5 py-2 rounded-lg font-medium text-xs transition " + (
                   activeTab === t.id
-                    ? 'bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900'
-                    : 'bg-white dark:bg-stone-900 text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800 border border-stone-200/80 dark:border-stone-700'
-                }`}
+                    ? "bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900"
+                    : "bg-white dark:bg-stone-900 text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800 border border-stone-200/80 dark:border-stone-700"
+                )}
               >
                 {t.icon}<span>{t.label}</span>
               </button>

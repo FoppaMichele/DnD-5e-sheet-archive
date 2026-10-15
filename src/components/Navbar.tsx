@@ -7,8 +7,8 @@ export const Navbar: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showModal, setShowModal] = useState(false);
   const [newName, setNewName] = useState('');
-
   const [isDark, setIsDark] = useState(false);
+
   useEffect(() => {
     setIsDark(document.documentElement.classList.contains('dark'));
   }, []);
@@ -33,7 +33,6 @@ export const Navbar: React.FC = () => {
               <h1 className="font-serif font-bold text-sm tracking-wider leading-none">5E SHEET</h1>
             </div>
           </div>
-
           <div className="flex flex-wrap items-center gap-1.5">
             <button onClick={toggleDark} className="p-1.5 mr-2 rounded-lg hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-500 dark:text-stone-400 transition" title="Toggle Dark Mode">
               {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
@@ -50,7 +49,7 @@ export const Navbar: React.FC = () => {
             <button onClick={saveCharacterPdf} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-amber-700 hover:bg-amber-600 text-white text-xs font-medium transition" title="Save PDF"><FileDown className="w-3.5 h-3.5" /><span>Save PDF</span></button>
             <button onClick={exportDatabaseJson} className="p-1.5 rounded-lg hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-600 dark:text-stone-400 border border-stone-200 dark:border-stone-700 transition" title="Export Backup"><Download className="w-3.5 h-3.5" /></button>
             <button onClick={() => fileInputRef.current?.click()} className="p-1.5 rounded-lg hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-600 dark:text-stone-400 border border-stone-200 dark:border-stone-700 transition" title="Import Backup"><Upload className="w-3.5 h-3.5" /></button>
-            <input ref={fileInputRef} type="file" accept=".json" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) importDatabaseJson(f); e.target.value = ''; }} />
+            <input ref={fileInputRef} type="file" accept=".json" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) importDatabaseJson(f); e.target.value = ""; }} />
           </div>
         </div>
       </header>
@@ -59,7 +58,7 @@ export const Navbar: React.FC = () => {
           <div className="parchment-card max-w-md w-full p-6 relative">
             <button onClick={() => setShowModal(false)} className="absolute top-4 right-4 text-stone-400"><X className="w-4 h-4" /></button>
             <h2 className="parchment-header">Create Character</h2>
-            <form onSubmit={(e) => { e.preventDefault(); if (newName.trim()) { createCharacter(newName.trim(), 'Fighter', 'Human'); setNewName(''); setShowModal(false); } }} className="space-y-4 mt-4">
+            <form onSubmit={(e) => { e.preventDefault(); if (newName.trim()) { createCharacter(newName.trim(), "Fighter", "Human"); setNewName(""); setShowModal(false); } }} className="space-y-4 mt-4">
               <input type="text" required placeholder="Character Name" value={newName} onChange={(e) => setNewName(e.target.value)} className="stat-input w-full" />
               <button type="submit" className="w-full py-1.5 rounded-lg bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 text-xs font-medium">Create</button>
             </form>
